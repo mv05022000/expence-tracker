@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="text"]#expDate,
+        input[type="text"]#cvc {
+            width: 50%;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: center;
+            width: 50%;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 ><a href="index.html" style="color: black;"> Expense Tracker</a></h2>
+        <form id="paymentForm">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" placeholder="Enter your card number" required>
+            <div>
+                <label for="expDate">Expiration Date:</label>
+                <input type="text" id="expDate" placeholder="MM/YY" required>
+                <label for="cvc">CVC:</label>
+                <input type="text" id="cvc" placeholder="CVC" required>
+            </div>
+            <button type="submit">Pay Now</button>
+        </form>
+    </div>
+
+    <script>
+        var form = document.getElementById('paymentForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var cardNumber = document.getElementById('cardNumber').value;
+            var expDate = document.getElementById('expDate').value;
+            var cvc = document.getElementById('cvc').value;
+            var paymentData = {
+                cardNumber: cardNumber,
+                expDate: expDate,
+                cvc: cvc
+            };
+            axios.post('/process_payment', paymentData)
+                .then(function(response) {
+                    alert('Payment successful!');
+                })
+                .catch(function(error) {
+                    alert('Payment failed. Please try again.');
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+</html>

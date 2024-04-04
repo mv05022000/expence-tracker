@@ -1,0 +1,10 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#expensesChartContainer {
+    max-width: 600px;
+    margin: 20px auto;
+}

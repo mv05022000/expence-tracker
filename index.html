@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: center;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        canvas {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .payment-button {
+            background-color: #28a745;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><a>Expense Tracker</a></h2>
+        <form id="expenseForm">
+            <label for="expenseName" >Expense Name:</label>
+            <input type="text" id="expenseName" required>
+            <label for="expenseAmount">Amount:</label>
+            <input type="number" id="expenseAmount" required>
+            <label for="expenseCategory">Category:</label>
+            <select id="expenseCategory">
+                <option value="Food">Food</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Entertainment">Entertainment</option>
+                <!-- Add more categories as needed -->
+            </select>
+            <button type="submit">Add Expense</button>
+        </form>
+        <canvas id="expenseChart" width="400" height="400"></canvas>
+        <button class="payment-button"> <a href="payment.html">Pay Now</a></button>
+    </div>
+
+    <script>
+        // Chart.js setup
+        var ctx = document.getElementById('expenseChart').getContext('2d');
+        var expenseChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Expenses',
+                    data: [],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        // Add more colors for additional categories
+                    ]
+                }]
+            }
+        });
+
+        // Expense tracking functionality
+        var expenseForm = document.getElementById('expenseForm');
+        var expenseNameInput = document.getElementById('expenseName');
+        var expenseAmountInput = document.getElementById('expenseAmount');
+        var expenseCategoryInput = document.getElementById('expenseCategory');
+
+        expenseForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var expenseName = expenseNameInput.value;
+            var expenseAmount = parseFloat(expenseAmountInput.value);
+            var expenseCategory = expenseCategoryInput.value;
+
+            if (expenseName && expenseAmount && !isNaN(expenseAmount)) {
+                // Update chart data
+                var currentData = expenseChart.data.datasets[0].data;
+                var currentIndex = expenseChart.data.labels.indexOf(expenseCategory);
+                if (currentIndex !== -1) {
+                    currentData[currentIndex] += expenseAmount;
+                } else {
+                    expenseChart.data.labels.push(expenseCategory);
+                    currentData.push(expenseAmount);
+                }
+                expenseChart.update();
+
+                // Clear input fields
+                expenseNameInput.value = '';
+                expenseAmountInput.value = '';
+            } else {
+                alert('Please fill out all fields with valid values.');
+            }
+        });
+
+        // Payment processing function (placeholder)
+        function processPayment() {
+            alert('Payment processed! (Simulated)');
+        }
+    </script>
+</body>
+</html>
